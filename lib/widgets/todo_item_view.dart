@@ -1,43 +1,127 @@
 import '../exports.dart';
 
-class TodoItemView extends StatelessWidget {
+class TodoItemView extends StatefulWidget {
   final TodoModel todoModel;
-  final int number;
+  final int index;
 
-  const TodoItemView({super.key, required this.todoModel, required this.number});
+  const TodoItemView({super.key, required this.todoModel, required this.index});
+
+  @override
+  State<TodoItemView> createState() => _TodoItemViewState();
+}
+
+class _TodoItemViewState extends State<TodoItemView> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  late Animation<double> _scaleAnimation;
+
+  bool _isPressed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 70),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTapDown(TapDownDetails details) {
+    setState(() => _isPressed = true);
+    _controller.forward();
+  }
+
+  void _onTapUp(TapUpDetails details) {
+    setState(() => _isPressed = false);
+    _controller.reverse();
+  }
+
+  void _onTapCancel() {
+    setState(() => _isPressed = false);
+    _controller.reverse();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  "$number. ${todoModel.name}",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+    final isSmallCard = MediaQuery.of(context).size.width < 400;
+
+    return GestureDetector(
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
+      onTapCancel: _onTapCancel,
+      // onTap: widget.onTap,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              // padding: EdgeInsets.all(16),
+              margin: EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0),
+              padding: EdgeInsets.all(isSmallCard ? 10 : 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.1),
+                  width: 1,
+                ),
+                gradient: LinearGradient(
+                  colors: getRandomColor(widget.index),
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: getRandomColor(widget.index)[0].withOpacity(0.3),
+                    blurRadius: _isPressed ? 8 : 16,
+                    offset: _isPressed ? const Offset(0, 2) : const Offset(0, 4),
                   ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "${widget.index + 1}. ${widget.todoModel.name}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Checkbox(
+                      value: widget.todoModel.isDone,
+                      onChanged: (check) {
+                        context.read<TodoCubit>().checkTodo(widget.todoModel, (check ?? false));
+                      },
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          context.read<TodoCubit>().deleteTodo(widget.todoModel);
+                        },
+                        icon: Icon(Icons.delete))
+                  ],
                 ),
               ),
-              Checkbox(
-                value: todoModel.isDone,
-                onChanged: (check) {
-                  context.read<TodoCubit>().checkTodo(todoModel, (check ?? false));
-                },
-              ),
-              IconButton(
-                  onPressed: () {
-                    context.read<TodoCubit>().deleteTodo(todoModel);
-                  },
-                  icon: Icon(Icons.delete))
-            ],
-          ),
-          Divider()
-        ],
+            ),
+          );
+        },
       ),
     );
   }

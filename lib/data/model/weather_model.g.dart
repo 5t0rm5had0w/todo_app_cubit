@@ -7,6 +7,8 @@ part of 'weather_model.dart';
 // **************************************************************************
 
 WeatherModel _$WeatherModelFromJson(Map<String, dynamic> json) => WeatherModel(
+      (json['latitude'] as num).toDouble(),
+      (json['longitude'] as num).toDouble(),
       WeatherUnits.fromJson(
           json['current_weather_units'] as Map<String, dynamic>),
       CurrentWeather.fromJson(json['current_weather'] as Map<String, dynamic>),
@@ -14,6 +16,8 @@ WeatherModel _$WeatherModelFromJson(Map<String, dynamic> json) => WeatherModel(
 
 Map<String, dynamic> _$WeatherModelToJson(WeatherModel instance) =>
     <String, dynamic>{
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
       'current_weather_units': instance.current_weather_units,
       'current_weather': instance.current_weather,
     };

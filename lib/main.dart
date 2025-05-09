@@ -31,6 +31,7 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp(
           navigatorKey: MyApp.navigatorKey,
           title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: false,

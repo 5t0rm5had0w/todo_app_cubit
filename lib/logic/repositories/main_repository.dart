@@ -7,8 +7,8 @@ class MainRepository {
 
   MainRepository({required this.apiServices});
 
-  Future<Either<String, WeatherModel>> getWeather() async {
-    return apiServices.getWeather();
+  Future<Either<String, WeatherModel>> getWeather(Position current) async {
+    return apiServices.getWeather(current);
   }
 
 }

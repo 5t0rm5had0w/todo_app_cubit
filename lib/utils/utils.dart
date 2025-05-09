@@ -27,3 +27,26 @@ Widget showMyProgress() {
     ),
   );
 }
+
+Widget skeleton({double? height, double? width, double? radius, Widget? child}) {
+  radius ??= 16;
+  return Container(
+    height: height,
+    width: width,
+    padding: const EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.black,
+      borderRadius: BorderRadius.circular(radius),
+    ),
+    child: child,
+  );
+}
+
+Widget shimmerColors({required Widget child, bool enabled = true}) {
+  return Shimmer.fromColors(
+    baseColor: Colors.grey,
+    highlightColor: Colors.grey.shade100,
+    enabled: enabled,
+    child: child,
+  );
+}

@@ -13,13 +13,13 @@ class ApiService {
     dio.interceptors.add(MyApp.alice.getDioInterceptor());
   }
 
-  Future<Either<String, WeatherModel>> getWeather() async {
+  Future<Either<String, WeatherModel>> getWeather(Position current) async {
     try {
       final response = await dio.get(
         "forecast",
         queryParameters: {
-          "latitude": 52.52,
-          "longitude": 13.41,
+          "latitude": current.latitude,
+          "longitude": current.longitude,
           "current_weather": true,
         },
       );

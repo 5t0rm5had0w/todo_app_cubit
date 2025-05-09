@@ -4,10 +4,12 @@ part 'weather_model.g.dart';
 
 @JsonSerializable()
 class WeatherModel {
+  final double latitude;
+  final double longitude;
   final WeatherUnits current_weather_units;
   final CurrentWeather current_weather;
 
-  WeatherModel(this.current_weather_units, this.current_weather);
+  WeatherModel(this.latitude, this.longitude,this.current_weather_units, this.current_weather);
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) => _$WeatherModelFromJson(json);
 
