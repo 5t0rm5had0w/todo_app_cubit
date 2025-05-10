@@ -11,15 +11,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<WeatherCubit>().getWeather();
-    context.read<TodoCubit>().getAllTodos();
+    context.read<WeatherBloc>().add(GetWeatherEvent());
+    // context.read<TodoCubit>().getAllTodos();
+    context.read<TodoBloc>().add(GetTodoEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<WeatherCubit, WeatherState>(
+        BlocListener<WeatherBloc, WeatherState>(
           listener: (context, state) {
             if (state.status.isFailure) {
               showDialog(
@@ -65,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             alignment: Alignment.topRight,
                             child: IconButton(
                               onPressed: () {
-                                context.read<WeatherCubit>().getWeather();
+                                context.read<WeatherBloc>().add(GetWeatherEvent());
                               },
                               icon: Icon(
                                 Icons.refresh,
@@ -84,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           color: colorBackground,
                         ),
-                        child: BlocBuilder<TodoCubit, TodoState>(
+                        child: BlocBuilder<TodoBloc, TodoState>(
                           builder: (context, state) {
                             return state.todos.isNotEmpty
                                 ? ListView.builder(

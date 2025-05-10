@@ -10,6 +10,8 @@ Future<void> initLocator() async {
   locator.registerLazySingleton<MainRepository>(() => MainRepository(apiServices: locator()));
 
   ///Cubit
-  locator.registerFactory(() => TodoCubit());
-  locator.registerFactory(() => WeatherCubit(locator()));
+  // locator.registerFactory(() => TodoCubit());
+  locator.registerFactory(() => TodoBloc());
+  // locator.registerFactory(() => WeatherCubit(locator()));
+  locator.registerFactory(() => WeatherBloc(locator()));
 }

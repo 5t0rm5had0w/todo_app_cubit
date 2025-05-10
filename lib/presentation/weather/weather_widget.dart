@@ -5,7 +5,7 @@ class WeatherWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WeatherCubit, WeatherState>(
+    return BlocBuilder<WeatherBloc, WeatherState>(
       builder: (context, state) {
         if (state.status.isInProgress) {
           return shimmerColors(

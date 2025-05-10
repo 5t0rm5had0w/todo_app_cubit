@@ -24,8 +24,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => locator<TodoCubit>()),
-        BlocProvider(create: (context) => locator<WeatherCubit>()),
+        // BlocProvider(create: (context) => locator<TodoCubit>()),
+        BlocProvider(create: (context) => locator<TodoBloc>()),
+        // BlocProvider(create: (context) => locator<WeatherCubit>()),
+        BlocProvider(create: (context) => locator<WeatherBloc>()),
       ],
       child: OverlaySupport.global(
         child: MaterialApp(

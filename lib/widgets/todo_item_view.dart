@@ -95,7 +95,8 @@ class _TodoItemViewState extends State<TodoItemView> with SingleTickerProviderSt
                 children: [
                   IconButton(
                     onPressed: () {
-                      context.read<TodoCubit>().checkTodo(widget.todoModel, !widget.todoModel.isDone);
+                      // context.read<TodoCubit>().checkTodo(widget.todoModel, !widget.todoModel.isDone);
+                      context.read<TodoBloc>().add(CheckTodoEvent(widget.todoModel, !widget.todoModel.isDone));
                     },
                     icon: Icon(
                       widget.todoModel.isDone ? IconsaxBold.tick_circle : IconsaxOutline.record,
@@ -126,7 +127,8 @@ class _TodoItemViewState extends State<TodoItemView> with SingleTickerProviderSt
                     onPressed: () {
                       confirmGeneralDialog(context, "Delete", subTitle: "Are you sure you want to delete this todo?",
                           pressOk: () {
-                        context.read<TodoCubit>().deleteTodo(widget.todoModel);
+                        // context.read<TodoCubit>().deleteTodo(widget.todoModel);
+                        context.read<TodoBloc>().add(DeleteTodoEvent(widget.todoModel));
                       });
                     },
                     icon: Icon(

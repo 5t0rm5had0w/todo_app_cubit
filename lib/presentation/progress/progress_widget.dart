@@ -5,7 +5,7 @@ class ProgressWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TodoCubit, TodoState>(
+    return BlocBuilder<TodoBloc, TodoState>(
       builder: (context, state) {
         return CircularPercentIndicator(
           radius: 80,
@@ -13,14 +13,14 @@ class ProgressWidget extends StatelessWidget {
           animation: true,
           animationDuration: 500,
           animateFromLastPercent: true,
-          percent: context.read<TodoCubit>().todosFinishPercent,
+          percent: context.read<TodoBloc>().todosFinishPercent,
           progressColor: colorPrimary,
           backgroundColor: colorBackground,
           circularStrokeCap: CircularStrokeCap.round,
           center: AnimatedFlipCounter(
             duration: Duration(milliseconds: 500),
             suffix: "%",
-            value: (context.read<TodoCubit>().todosFinishPercent * 100).round(),
+            value: (context.read<TodoBloc>().todosFinishPercent * 100).round(),
             textStyle: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white), // pass in a value like 2014
           ),
         );

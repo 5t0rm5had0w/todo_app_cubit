@@ -23,7 +23,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TodoCubit, TodoState>(
+    return BlocListener<TodoBloc, TodoState>(
       listener: (context, state) {
         if (state.status.isSuccess && state.todoType == EnumTodoType.add) {
           Navigator.pop(context);
@@ -101,9 +101,11 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
                             return;
                           }
                           if (widget.itemTodo != null) {
-                            context.read<TodoCubit>().editTodo(widget.itemTodo!.copyWith(name: td));
+                            // context.read<TodoCubit>().editTodo(widget.itemTodo!.copyWith(name: td));
+                            context.read<TodoBloc>().add(EditTodoEvent(widget.itemTodo!.copyWith(name: td)));
                           } else {
-                            context.read<TodoCubit>().addTodo(td);
+                            // context.read<TodoCubit>().addTodo(td);
+                            context.read<TodoBloc>().add(AddTodoEvent(td));
                           }
                         },
                         child: Container(
