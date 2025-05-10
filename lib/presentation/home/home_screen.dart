@@ -57,22 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Row(
                             children: [
-                              Expanded(child: WeatherScreen()),
-                              Expanded(
-                                child: CircularPercentIndicator(
-                                  radius: 80,
-                                  lineWidth: 20,
-                                  percent: 0.4,
-                                  progressColor: colorPrimary,
-                                  backgroundColor: colorBackground,
-                                  circularStrokeCap: CircularStrokeCap.round,
-                                  center: Text(
-                                    "40%",
-                                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold,color: Colors.white),
-                                  ),
-
-                                ),
-                              ),
+                              Expanded(child: WeatherWidget()),
+                              Expanded(child: ProgressWidget()),
                             ],
                           ),
                           Align(
@@ -100,14 +86,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: BlocBuilder<TodoCubit, TodoState>(
                           builder: (context, state) {
-                            return ListView.builder(
-                              padding: EdgeInsets.zero,
-                              itemCount: state.todos.length,
-                              itemBuilder: (context, index) {
-                                var item = state.todos[index];
-                                return TodoItemView(todoModel: item, index: index);
-                              },
-                            );
+                            return state.todos.isNotEmpty
+                                ? ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    itemCount: state.todos.length,
+                                    itemBuilder: (context, index) {
+                                      var item = state.todos[index];
+                                      return TodoItemView(todoModel: item, index: index);
+                                    },
+                                  )
+                                : Center(
+                                    child: Image.asset(
+                                      Assets.imageEmptyList,
+                                      height: 250,
+                                    ),
+                                  );
                           },
                         ),
                       ),
@@ -124,12 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Icon(Icons.add),
             ),
           ),
-          // Selector<WeatherCubit, bool>(
-          //   selector: (_, trainCubit) => trainCubit.state.status.isInProgress,
-          //   builder: (context, isLoading, child) {
-          //     return isLoading ? showMyProgress() : const SizedBox.shrink();
-          //   },
-          // ),
         ],
       ),
     );
@@ -138,16 +125,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void _addTodoDialog(BuildContext context) async {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return AddTodoScreen();
       },
     );
   }
-}
-
-Future<String> fetchData(double latitude, double longitude) async {
-  var place = await getPlaceMarkFromLatLng(latitude, longitude);
-  return place;
 }
 
 final Shader linearGradient = LinearGradient(

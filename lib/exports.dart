@@ -1,5 +1,6 @@
 export 'dart:convert';
 
+export 'package:animated_flip_counter/animated_flip_counter.dart';
 export 'package:bloc/bloc.dart';
 export 'package:dio/dio.dart';
 export 'package:equatable/equatable.dart';
@@ -29,7 +30,8 @@ export 'logic/service/service_locator.dart';
 export 'main.dart';
 export 'presentation/add_todo/add_todo_screen.dart';
 export 'presentation/home/home_screen.dart';
-export 'presentation/weather/weather_screen.dart';
+export 'presentation/progress/progress_widget.dart';
+export 'presentation/weather/weather_widget.dart';
 export 'utils/address_name.dart';
 export 'utils/colors.dart';
 export 'utils/constants.dart';

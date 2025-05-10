@@ -1,9 +1,25 @@
 import '../../exports.dart';
 
-class AddTodoScreen extends StatelessWidget {
-  AddTodoScreen({super.key});
+class AddTodoScreen extends StatefulWidget {
+  final TodoModel? itemTodo;
 
+  const AddTodoScreen({super.key, this.itemTodo});
+
+  @override
+  State<AddTodoScreen> createState() => _AddTodoScreenState();
+}
+
+class _AddTodoScreenState extends State<AddTodoScreen> {
   final TextEditingController _todoController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    var todo = widget.itemTodo;
+    if (todo != null) {
+      _todoController.text = todo.name;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +35,7 @@ class AddTodoScreen extends StatelessWidget {
           margin: EdgeInsets.symmetric(horizontal: 20.0),
           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12.0),
+            borderRadius: BorderRadius.circular(20.0),
             color: Colors.white,
           ),
           child: Material(
@@ -28,6 +44,7 @@ class AddTodoScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
+                8.height,
                 Text(
                   "New todo",
                   textAlign: TextAlign.center,
@@ -36,7 +53,7 @@ class AddTodoScreen extends StatelessWidget {
                 8.height,
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(80),
                     color: Colors.grey.shade200,
                   ),
                   child: TextField(
@@ -44,7 +61,7 @@ class AddTodoScreen extends StatelessWidget {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "Enter...",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
                     ),
                   ),
                 ),
@@ -57,9 +74,9 @@ class AddTodoScreen extends StatelessWidget {
                           Navigator.pop(context);
                         },
                         child: Container(
-                          padding: EdgeInsets.all(12.0),
+                          padding: EdgeInsets.all(16.0),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.0),
+                            borderRadius: BorderRadius.circular(12.0),
                             color: Colors.grey.shade300,
                           ),
                           child: Text(
@@ -67,7 +84,7 @@ class AddTodoScreen extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 16.0,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
                               color: Colors.black,
                             ),
                           ),
@@ -83,20 +100,24 @@ class AddTodoScreen extends StatelessWidget {
                             Fluttertoast.showToast(msg: "Write todo!!!", backgroundColor: Colors.orange);
                             return;
                           }
-                          context.read<TodoCubit>().addTodo(td);
+                          if (widget.itemTodo != null) {
+                            context.read<TodoCubit>().editTodo(widget.itemTodo!.copyWith(name: td));
+                          } else {
+                            context.read<TodoCubit>().addTodo(td);
+                          }
                         },
                         child: Container(
-                          padding: EdgeInsets.all(12.0),
+                          padding: EdgeInsets.all(16.0),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.0),
-                            color: Colors.green.shade400,
+                            borderRadius: BorderRadius.circular(12.0),
+                            color: colorPrimary,
                           ),
                           child: Text(
-                            "Save",
+                            widget.itemTodo != null ? "Edit" : "Save",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 16.0,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
                               color: Colors.white,
                             ),
                           ),
@@ -105,7 +126,7 @@ class AddTodoScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                4.height,
+                8.height,
               ],
             ),
           ),

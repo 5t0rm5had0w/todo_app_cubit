@@ -50,6 +50,7 @@ dependencies:
   dartz:
   formz:
   percent_indicator:
+  animated_flip_counter:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

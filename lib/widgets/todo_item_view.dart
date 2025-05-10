@@ -70,7 +70,6 @@ class _TodoItemViewState extends State<TodoItemView> with SingleTickerProviderSt
           return Transform.scale(
             scale: _scaleAnimation.value,
             child: Container(
-              // padding: EdgeInsets.all(16),
               margin: EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0),
               padding: EdgeInsets.all(isSmallCard ? 10 : 16),
               decoration: BoxDecoration(
@@ -92,37 +91,67 @@ class _TodoItemViewState extends State<TodoItemView> with SingleTickerProviderSt
                   ),
                 ],
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "${widget.index + 1}. ${widget.todoModel.name}",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      context.read<TodoCubit>().checkTodo(widget.todoModel, !widget.todoModel.isDone);
+                    },
+                    icon: Icon(
+                      widget.todoModel.isDone ? IconsaxBold.tick_circle : IconsaxOutline.record,
+                      color: Colors.white,
+                    ),
+                  ),
+                  4.width,
+                  Expanded(
+                    child: Text(
+                      widget.todoModel.name,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
                       ),
                     ),
-                    Checkbox(
-                      value: widget.todoModel.isDone,
-                      onChanged: (check) {
-                        context.read<TodoCubit>().checkTodo(widget.todoModel, (check ?? false));
-                      },
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      _addTodoDialog(context, widget.todoModel);
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      color: Colors.white,
                     ),
-                    IconButton(
-                        onPressed: () {
-                          context.read<TodoCubit>().deleteTodo(widget.todoModel);
-                        },
-                        icon: Icon(Icons.delete))
-                  ],
-                ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      confirmGeneralDialog(context, "Delete", subTitle: "Are you sure you want to delete this todo?",
+                          pressOk: () {
+                        context.read<TodoCubit>().deleteTodo(widget.todoModel);
+                      });
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
           );
         },
       ),
+    );
+  }
+
+  void _addTodoDialog(BuildContext context, TodoModel item) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AddTodoScreen(
+          itemTodo: item,
+        );
+      },
     );
   }
 }

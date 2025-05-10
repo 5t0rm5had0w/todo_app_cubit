@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String imageEmptyList = 'assets/image/empty_list.png';
   static const String imageWeather = 'assets/image/weather.jpg';
 
 }

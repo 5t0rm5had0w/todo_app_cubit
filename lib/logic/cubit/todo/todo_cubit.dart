@@ -31,4 +31,23 @@ class TodoCubit extends Cubit<TodoState> {
     var todos = PrefUtils.getTodos();
     emit(state.copyWith(status: FormzSubmissionStatus.success, todos: todos));
   }
+
+  void editTodo(TodoModel todoModel) async {
+    emit(state.copyWith(status: FormzSubmissionStatus.initial, todoType: EnumTodoType.none));
+    await PrefUtils.setTodo(todoModel);
+    var todos = PrefUtils.getTodos();
+    emit(state.copyWith(status: FormzSubmissionStatus.success, todoType: EnumTodoType.add, todos: todos));
+  }
+
+  int get allTodosLenth => state.todos.length;
+
+  int get finishTodosLenth => state.todos.where((e) => e.isDone == true).length;
+
+  int get unFinishTodosLenth => state.todos.where((e) => e.isDone == false).length;
+
+  double get todosFinishPercent {
+    var todos = state.todos;
+    if (todos.isEmpty) return 0.0;
+    return finishTodosLenth / allTodosLenth;
+  }
 }

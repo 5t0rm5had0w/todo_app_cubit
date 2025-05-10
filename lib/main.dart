@@ -37,9 +37,24 @@ class _MyAppState extends State<MyApp> {
             useMaterial3: false,
           ),
           home: const HomeScreen(),
+          builder: (context, child) => ScrollConfiguration(
+            behavior: NoGlowScrollBehavior(),
+            child: child!,
+          ),
         ),
       ),
     );
+  }
+}
+
+class NoGlowScrollBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    return child;
   }
 }
 

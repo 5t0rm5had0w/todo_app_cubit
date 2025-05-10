@@ -1,7 +1,7 @@
 import '../../exports.dart';
 
-class WeatherScreen extends StatelessWidget {
-  const WeatherScreen({super.key});
+class WeatherWidget extends StatelessWidget {
+  const WeatherWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +93,8 @@ class WeatherScreen extends StatelessWidget {
                     ),
                     4.width,
                     FutureBuilder(
-                      future: fetchData(data.latitude, data.longitude),
-                      builder: (context, snapshot) {
+                            future: _fetchData(data.latitude, data.longitude),
+                            builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           return Expanded(
                             child: Text(
@@ -168,4 +168,9 @@ class WeatherScreen extends StatelessWidget {
       },
     );
   }
+}
+
+Future<String> _fetchData(double latitude, double longitude) async {
+  var place = await getPlaceMarkFromLatLng(latitude, longitude);
+  return place;
 }
